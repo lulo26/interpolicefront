@@ -1,4 +1,4 @@
-let api = "http://localhost:4200/api/species/";
+let api = "https://interpolice-omfr.onrender.com/api/species/";
 let contenido = document.querySelector("#contenido");
 let btnNuevaEspecie = document.querySelector("#btnNuevaEspecie");
 

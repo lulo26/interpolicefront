@@ -46,7 +46,7 @@ btnNuevo.addEventListener("click", () => {
   frmCrearCitizen.show();
 });
 
-let api = "http://localhost:4200/api/citizen/";
+let api = "https://interpolice-omfr.onrender.com/api/citizen/";
 
 // mostrar elementos en la tabla
 function listartodos() {
