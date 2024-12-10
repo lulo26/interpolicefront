@@ -3,6 +3,14 @@ let contenido = document.querySelector("#contenido");
 let btnNuevaEspecie = document.querySelector("#btnNuevaEspecie");
 let frmAction = "";
 
+const on = (element, event, selector, handler) => {
+  element.addEventListener(event, (e) => {
+    if (e.target.closest(selector)) {
+      handler(e);
+    }
+  });
+};
+
 //mostrar elementos en la tabla
 function listartodos() {
   fetch(api + "listarespecies")
