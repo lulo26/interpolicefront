@@ -1,6 +1,7 @@
 let api = "https://interpolice-omfr.onrender.com/api/species/";
 let contenido = document.querySelector("#contenido");
 let btnNuevaEspecie = document.querySelector("#btnNuevaEspecie");
+let frmAction = "";
 
 //mostrar elementos en la tabla
 function listartodos() {
