@@ -94,6 +94,7 @@ frmCitizen.addEventListener("submit", (e) => {
         password: password.value,
         especie: especie.value,
         rol: rol.value,
+        foto: "img",
       }),
     })
       .then((res) => res.json())
@@ -120,6 +121,7 @@ frmCitizen.addEventListener("submit", (e) => {
         fecha: fecha.value,
         especie: especie.value,
         rol: rol.value,
+        foto: "img",
       }),
     })
       .then((res) => res.json())
@@ -164,6 +166,7 @@ on(document, "click", ".btnEditar", (e) => {
   apellido.value = fila.children[2].innerText;
   email.value = fila.children[3].innerText;
   apodo.value = fila.children[4].innerText;
+  password.value = fila.children[5].innerText;
   fecha.value = fila.children[5].innerText;
   especie.value = fila.children[6].innerText;
   rol.value = fila.children[7].innerText;
