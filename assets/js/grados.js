@@ -32,9 +32,9 @@ function listartodos() {
       .then((res) => {
         res.grados.forEach((grados) => {
           let fila = `<tr>
-            <td>${grados.idgrado}</td>
+            <td>${grados.idgrado_delito}</td>
             <td>${grados.grado_delito}</td>
-            <td>${grados.descripcion_grado}</td>
+            <td>${grados.descripción_grado}</td>
             <td><button class="btnBorrar btn btn-danger"><i class="bi bi-trash"></i></button></td>
             <td><button class="btnEditar btn btn-primary"><i class="bi bi-pencil-square"></i></button></td>
             </tr><br>`;
