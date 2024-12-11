@@ -573,10 +573,6 @@
                 <div class="col-md-4">
                   <div class="form-floating mb-3">
                     <select class="form-select" id="especie" name="especie">
-                      <option selected>Seleccione la especie</option>
-                      <option value="1">Alien</option>
-                      <option value="2">Humano</option>
-                      <option value="2">Robot</option>
                     </select>
                     <label for="especie">Especie</label>
                   </div>
@@ -584,7 +580,7 @@
                 <div class="col-md-4">
                   <div class="form-floating mb-3">
                     <select class="form-select" id="rol" name="rol">
-                      <option selected>Seleccione el rol</option>
+                      <option selected hidden>Seleccione el rol</option>
                       <option value="1">Ciudadano</option>
                       <option value="2">Policia</option>
                       <option value="2">Administrador</option>
@@ -609,6 +605,7 @@
                     type="button"
                     class="btn btn-secondary"
                     data-bs-dismiss="modal"
+                    onclick="cleanInput()"
                   >
                     Close
                   </button>

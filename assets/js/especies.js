@@ -1,7 +1,9 @@
 let api = "https://interpolice-omfr.onrender.com/api/species/";
 let contenido = document.querySelector("#contenido");
 let btnNuevaEspecie = document.querySelector("#btnNuevaEspecie");
+let frmSpecies = document.querySelector("#frmSpecies")
 let frmAction = "";
+let nombre = document.querySelector("#nombre")
 
 const on = (element, event, selector, handler) => {
   element.addEventListener(event, (e) => {
@@ -69,7 +71,7 @@ frmSpecies.addEventListener("submit", (e) => {
 
   // editar ciudadano
   if (frmAction === "editar") {
-    fetch(api + "editar", {
+    fetch(api + "editar/" + idform, {
       method: "PUT",
       headers: {
         "content-type": "application/json",
@@ -113,10 +115,15 @@ on(document, "click", ".btnBorrar", (e) => {
 let idform = "";
 on(document, "click", ".btnEditar", (e) => {
   let fila = e.target.parentNode.parentNode.parentNode;
-  console.log(fila);
   let idciudadano = fila.children[0].innerText;
-  console.log(idform);
   idform = idciudadano;
-  nombre.value = fila.children[1].innerText;
-  frmCrearEspecie.show();
-});
+  fetch(api + "listarid/" + idform) 
+  .then((res) => res.json())
+  .then((res) => {
+    species = res.species[0]
+    console.log(species);
+    nombre.value = species.nombre_especie;
+    frmAction = "editar";
+    frmCrearEspecie.show();
+  })
+})

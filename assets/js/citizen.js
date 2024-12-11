@@ -14,7 +14,11 @@ let fecha = document.querySelector("#fecha");
 let especie = document.querySelector("#especie");
 let rol = document.querySelector("#rol");
 let foto = document.querySelector("#foto");
+
 // ... ... ... ... ... ... ... ... ... ... ... ... ... //
+
+let api = "https://interpolice-omfr.onrender.com/api/citizen/";
+let apiSpecie = "https://interpolice-omfr.onrender.com/api/species/"
 
 let frmAction = "";
 
@@ -33,20 +37,32 @@ const frmCrearCitizen = new bootstrap.Modal(
 
 // disparar la modal
 btnNuevo.addEventListener("click", () => {
-  // limpiar los input
+  cleanInput()
+  frmAction = "crear";
+  frmCrearCitizen.show();
+});
+
+function cleanInput(){
+  let idform = "";
   nombre.value = "";
   apellido.value = "";
   email.value = "";
   apodo.value = "";
   fecha.value = "";
-  especie.value = "";
-  rol.value = "";
-  foto.value = "";
-  frmAction = "crear";
-  frmCrearCitizen.show();
-});
+}
 
-let api = "https://interpolice-omfr.onrender.com/api/citizen/";
+function showSpecies(){
+  especie.innerHTML = `<option selected hidden value="0">Seleccione la especie</option>`
+  fetch(apiSpecie + "listarespecies")
+    .then((res) => res.json())
+    .then((res) => {
+      res.species.forEach((species) => {
+        console.log(species);
+        especie.innerHTML += `<option value="${species.idespecie}" >${species.nombre_especie}</option> `;
+      });
+    });
+}
+
 
 // mostrar elementos en la tabla
 function listartodos() {
@@ -63,8 +79,8 @@ function listartodos() {
         <td>${citizen.fechaorigen}</td>
         <td>${citizen.nombre_especie}</td>
         <td>${citizen.nombre_rol}</td>
-        <td><button class="btnBorrar btn btn-danger"><i class="bi bi-trash"></i></button></td>
-        <td><button class="btnEditar btn btn-primary"><i class="bi bi-pencil-square"></i></button></td>
+        <td><button class="btnBorrar btn btn-danger" id="${citizen.idciudadano}"><i class="bi bi-trash"></i></button></td>
+        <td><button class="btnEditar btn btn-primary" id="${citizen.idciudadano}"><i class="bi bi-pencil-square"></i></button></td>
         </tr><br>`;
         contenido.innerHTML += fila;
       });
@@ -73,6 +89,7 @@ function listartodos() {
 
 document.addEventListener("DOMContentLoaded", () => {
   listartodos();
+  showSpecies()
 });
 
 // boton submit
@@ -85,7 +102,7 @@ frmCitizen.addEventListener("submit", (e) => {
       headers: {
         "content-type": "application/json",
       },
-      body: JSON.stringify({
+        body: JSON.stringify({
         nombre: nombre.value,
         apellido: apellido.value,
         email: email.value,
@@ -107,18 +124,19 @@ frmCitizen.addEventListener("submit", (e) => {
 
   // editar ciudadano
   if (frmAction === "editar") {
-    fetch(api + "editar", {
+    fetch(api + "editar/" + idform, {
       method: "PUT",
       headers: {
         "content-type": "application/json",
       },
 
-      body: JSON.stringify({
+        body: JSON.stringify({
         nombre: nombre.value,
         apellido: apellido.value,
         email: email.value,
         apodo: apodo.value,
         fecha: fecha.value,
+        password: password.value,
         especie: especie.value,
         rol: rol.value,
         foto: "img",
@@ -154,22 +172,26 @@ on(document, "click", ".btnBorrar", (e) => {
   }
 });
 
-// llamar formulario de edición
 let idform = "";
+// llamar formulario de edición
 on(document, "click", ".btnEditar", (e) => {
   let fila = e.target.parentNode.parentNode.parentNode;
-  console.log(fila);
   let idciudadano = fila.children[0].innerText;
-  console.log(idform);
-  idform = idciudadano;
-  nombre.value = fila.children[1].innerText;
-  apellido.value = fila.children[2].innerText;
-  email.value = fila.children[3].innerText;
-  apodo.value = fila.children[4].innerText;
-  password.value = fila.children[5].innerText;
-  fecha.value = fila.children[5].innerText;
-  especie.value = fila.children[6].innerText;
-  rol.value = fila.children[7].innerText;
-  frmAction = "editar";
-  frmCrearCitizen.show();
+  idform = idciudadano;  
+  fetch(api + "listarid/" + idform) 
+  .then((res) => res.json())
+    .then((res) => {
+      citizen = res.citizen[0]
+      console.log(citizen);
+      nombre.value = citizen.nombre_ciudadano;
+      apellido.value = citizen.apellido_ciudadano;
+      email.value = citizen.email_ciudadano;
+      apodo.value = citizen.apodo_ciudadano;
+      password.value = citizen.password_ciudadano;
+      fecha.value = citizen.fechaorigen;
+      especie.innerHTML += `<option selected hidden value="${citizen.especies_idespecie}" >${citizen.nombre_especie}</option> `;
+      rol.innerHTML += `<option selected hidden value="${citizen.roles_idrol}" >${citizen.nombre_rol}</option> `;
+      frmAction = "editar";
+      frmCrearCitizen.show();
+    })
 });

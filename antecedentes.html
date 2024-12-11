@@ -4,7 +4,7 @@
     <meta charset="utf-8" />
     <meta content="width=device-width, initial-scale=1.0" name="viewport" />
 
-    <title>Dashboard</title>
+    <title>Antecedentes</title>
     <meta content="" name="description" />
     <meta content="" name="keywords" />
 
@@ -464,6 +464,84 @@
         </div>
       </section>
 
+      <div
+      class="modal fade"
+      id="frmCrearAnt"
+      tabindex="-1"
+      aria-labelledby="exampleModalLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog modal-dialog-centered modal-xl">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h1 class="modal-title fs-5" id="frmCitizenLabel">Nuevo</h1>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+            ></button>
+          </div>
+
+          <div class="modal-body">
+            <form class="row g-3 needs-validation" id="frmAnt" novalidate>
+              <div class="col-md-4">
+                <div class="form-floating">
+                  <input
+                    type="date"
+                    class="form-control"
+                    id="fecha"
+                    name="fecha"
+                    placeholder="fecha"
+                    required
+                  />
+                  <label for="fecha">Fecha</label>
+                </div>
+              </div>
+               <div class="col-md-4">
+                <div class="form-floating mb-3">
+                  <select class="form-select" id="ciudadano" name="ciudadano">
+                    <option selected>Seleccione el ciudadano</option>
+                    <option value="1">option 1</option>
+                    <option value="2">option 2</option>
+                    <option value="2">option 3</option>
+                  </select>
+                  <label for="especie">Ciudadano</label>
+                </div>
+              </div>
+              <div class="col-md-4">
+                <div class="form-floating mb-3">
+                  <select class="form-select" id="delito" name="delito">
+                    <option selected>Seleccione el delito</option>
+                    <option value="1">delito1</option>
+                    <option value="2">delito2</option>
+                    <option value="2">delito3</option>
+                  </select>
+                  <label for="rol">Delito</label>
+                </div>
+              </div>
+              <div class="col-md-12">
+                <div class="form-floating mb-3">
+                    <textarea class="form-control" style="height: 100px" id="descripcion" name="descripcion"></textarea>
+                    <label for="descripcion">Descripcion</label>
+                </div>
+                </div>
+              <div class="modal-footer">
+                <button
+                  type="button"
+                  class="btn btn-secondary"
+                  data-bs-dismiss="modal"
+                >
+                  Close
+                </button>
+                <button type="submit" class="btn btn-success">Guardar</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+
     </main>
     <!-- End #main -->
 
@@ -501,5 +579,6 @@
 
     <!-- Template Main JS File -->
     <script src="./assets/vendor/NiceAdmin/assets/js/main.js"></script>
+    <script src="assets/js/antecedentes.js"></script>
   </body>
 </html>
