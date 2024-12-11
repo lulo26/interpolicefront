@@ -1,10 +1,16 @@
 console.log("hello world");
 
 let api = "https://interpolice-omfr.onrender.com/api/delitos/";
+let apigrado = "https://interpolice-omfr.onrender.com/api/grados/";
+
 let contenido = document.querySelector("#contenido");
 let btnNuevoDelito = document.querySelector("#btnNuevoDelito");
 let frmAction = "";
 let frmDelitos = document.querySelector("#frmDelitos")
+
+let nombre = document.querySelector("#nombre")
+let grado = document.querySelector("#grado")
+let descripcion = document.querySelector("#descripcion")
 
 const on = (element, event, selector, handler) => {
     element.addEventListener(event, (e) => {
@@ -22,7 +28,6 @@ const frmCrearDelito = new bootstrap.Modal(
 // disparar la modal
 btnNuevoDelito.addEventListener("click", () => {
     nombre.value = "";
-    grado.value = "";
     descripcion.value = "";
     frmAction = "crear";
     frmCrearDelito.show();
@@ -49,7 +54,20 @@ function listartodos() {
   
   window.addEventListener("DOMContentLoaded", (e) => {
     listartodos();
+    showgrados()
   });
+
+  function showgrados(){
+    grado.innerHTML += `<option selected hidden value="0">Seleccione el grado</option>`
+    fetch(apigrado + "listartodos")
+      .then((res) => res.json())
+      .then((res) => {
+        res.grados.forEach((grados) => {
+          console.log(grados);
+          grado.innerHTML += `<option value="${grados.idgrado}" >${grados.grado_delito}</option> `;
+        });
+      });
+  }
   
   // boton submit
   frmDelitos.addEventListener("submit", (e) => {
@@ -77,7 +95,7 @@ function listartodos() {
   
     // editar ciudadano
     if (frmAction === "editar") {
-      fetch(api + "editar", {
+      fetch(api + "editar/" + idform, {
         method: "PUT",
         headers: {
           "content-type": "application/json",
@@ -123,12 +141,17 @@ function listartodos() {
   let idform = "";
   on(document, "click", ".btnEditar", (e) => {
     let fila = e.target.parentNode.parentNode.parentNode;
-    console.log(fila);
     let iddelito = fila.children[0].innerText;
-    console.log(idform);
     idform = iddelito;
-    nombre.value = fila.children[1].innerText;
-    //grado.value = fila.children[2].innerText;
-    descripcion.value = fila.children[3].innerText;
+    fetch(api + "listarid/" + idform) 
+      .then((res) => res.json())
+      .then((res) => {
+        delitos = res.delitos[0]
+        console.log(delitos);
+        nombre.value = delitos.nombre_delito;
+        grado.innerHTML += `<option selected hidden value="${delitos.idgrado_delito}" >${delitos.grado_delito}</option>`
+        descripcion.value = delitos.descripcion_delito;
+        frmAction = "editar";
     frmCrearDelito.show();
   });
+})

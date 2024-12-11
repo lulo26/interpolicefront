@@ -6,6 +6,9 @@ let btnNuevo = document.querySelector("#btnNuevo");
 let frmAction = "";
 let frmGrados = document.querySelector("#frmGrados")
 
+let grado = document.querySelector("#grado")
+let descripcion = document.querySelector("#descripcion")
+
 const on = (element, event, selector, handler) => {
     element.addEventListener(event, (e) => {
       if (e.target.closest(selector)) {
@@ -34,7 +37,7 @@ function listartodos() {
           let fila = `<tr>
             <td>${grados.idgrado_delito}</td>
             <td>${grados.grado_delito}</td>
-            <td>${grados.descripción_grado}</td>
+            <td>${grados.descripcion_grado}</td>
             <td><button class="btnBorrar btn btn-danger"><i class="bi bi-trash"></i></button></td>
             <td><button class="btnEditar btn btn-primary"><i class="bi bi-pencil-square"></i></button></td>
             </tr><br>`;
@@ -58,7 +61,7 @@ function listartodos() {
           "content-type": "application/json",
         },
         body: JSON.stringify({
-            grado: grado.value,
+          grado: grado.value,
           descripcion: descripcion.value,
         }),
       })
@@ -72,7 +75,7 @@ function listartodos() {
   
     // editar ciudadano
     if (frmAction === "editar") {
-      fetch(api + "editar", {
+      fetch(api + "editar/" + idform, {
         method: "PUT",
         headers: {
           "content-type": "application/json",
@@ -117,11 +120,16 @@ function listartodos() {
   let idform = "";
   on(document, "click", ".btnEditar", (e) => {
     let fila = e.target.parentNode.parentNode.parentNode;
-    console.log(fila);
-    let idrado = fila.children[0].innerText;
-    console.log(idform);
-    idform = idrado;
-    grado.value = fila.children[1].innerText;
-    descripcion.value = fila.children[2].innerText;
-    frmCrearGrado.show();
-  });
+    let idgrado = fila.children[0].innerText;
+    idform = idgrado;
+    fetch(api + "listarid/" + idform) 
+      .then((res) => res.json())
+      .then((res) => {
+        grados = res.grados[0]
+        console.log(grados);
+        grado.value = grados.grado_delito;
+        descripcion.value = grados.descripcion_grado;
+        frmAction = "editar";
+        frmCrearGrado.show();
+  })
+})
