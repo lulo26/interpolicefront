@@ -64,7 +64,7 @@ function listartodos() {
       .then((res) => {
         res.grados.forEach((grados) => {
           console.log(grados);
-          grado.innerHTML += `<option value="${grados.idgrado}" >${grados.grado_delito}</option> `;
+          grado.innerHTML += `<option value="${grados.idgrado_delito}" >${grados.grado_delito}</option> `;
         });
       });
   }
