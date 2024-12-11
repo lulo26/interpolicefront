@@ -1,5 +1,7 @@
 console.log("hello world");
 
+let idactual
+
 let api = "https://interpolice-omfr.onrender.com/api/delitos/";
 let apigrado = "https://interpolice-omfr.onrender.com/api/grados/";
 
@@ -39,18 +41,20 @@ function listartodos() {
       .then((res) => res.json())
       .then((res) => {
         res.delitos.forEach((delitos) => {
+          console.log(delitos);
           let fila = `<tr>
             <td>${delitos.iddelito}</td>
             <td>${delitos.nombre_delito}</td>
             <td>${delitos.descripcion_delito}</td>
-            <td>${delitos.grado_delitos}</td>
-            <td><button class="btnBorrar btn btn-danger"><i class="bi bi-trash"></i></button></td>
-            <td><button class="btnEditar btn btn-primary"><i class="bi bi-pencil-square"></i></button></td>
+            <td>${delitos.idgrado_delitos}</td>
+          <td><button class="btnBorrar btn btn-danger" data-action-type='eliminar' rel="${delitos.iddelito}"><i class="bi bi-trash"></i></button></td>
+          <td><button class="btnEditar btn btn-primary" data-action-type='editar' rel="${delitos.iddelito}"><i class="bi bi-pencil-square"></i></button></td>
             </tr><br>`;
           contenido.innerHTML += fila;
         });
       });
   }
+
   
   window.addEventListener("DOMContentLoaded", (e) => {
     listartodos();
@@ -80,9 +84,9 @@ function listartodos() {
           "content-type": "application/json",
         },
         body: JSON.stringify({
-          nombre: nombre.value,
-          descripcion: descripcion.value,
-          grado: grado.value
+        nombre: nombre.value,
+        descripcion: descripcion.value,
+        grado: grado.value
         }),
       })
         .then((res) => res.json())
@@ -95,7 +99,7 @@ function listartodos() {
   
     // editar ciudadano
     if (frmAction === "editar") {
-      fetch(api + "editar/" + idform, {
+      fetch(api + "editar/" + idactual, {
         method: "PUT",
         headers: {
           "content-type": "application/json",
@@ -119,15 +123,13 @@ function listartodos() {
   });
   
   on(document, "click", ".btnBorrar", (e) => {
-    let fila = e.target.parentNode.parentNode.parentNode;
-    let idform = fila.firstElementChild.innerText;
+    let idDelito = e.target.closest("button").getAttribute("rel");
     let respuesta = window.confirm(
-      `seguro que desea eliminar el registro con id: ${idform}`
+      `seguro que desea eliminar el registro con id: ${idDelito}`
     );
-    console.log(idform);
   
     if (respuesta) {
-      fetch(api + "borrar/" + idform, {
+      fetch(api + "borrar/" + idDelito, {
         method: "DELETE",
       })
         .then((res) => res.json())
@@ -140,10 +142,9 @@ function listartodos() {
   // llamar formulario de edición
   let idform = "";
   on(document, "click", ".btnEditar", (e) => {
-    let fila = e.target.parentNode.parentNode.parentNode;
-    let iddelito = fila.children[0].innerText;
-    idform = iddelito;
-    fetch(api + "listarid/" + idform) 
+    let idDelito = e.target.closest("button").getAttribute("rel");
+    idactual = idDelito
+    fetch(api + "listarid/" + idDelito) 
       .then((res) => res.json())
       .then((res) => {
         delitos = res.delitos[0]

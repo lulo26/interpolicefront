@@ -1,3 +1,5 @@
+let idactual;
+
 let api = "https://interpolice-omfr.onrender.com/api/species/";
 let contenido = document.querySelector("#contenido");
 let btnNuevaEspecie = document.querySelector("#btnNuevaEspecie");
@@ -22,8 +24,8 @@ function listartodos() {
         let fila = `<tr>
           <td>${species.idespecie}</td>
           <td>${species.nombre_especie}</td>
-          <td><button class="btnBorrar btn btn-danger"><i class="bi bi-trash"></i></button></td>
-          <td><button class="btnEditar btn btn-primary"><i class="bi bi-pencil-square"></i></button></td>
+          <td><button class="btnBorrar btn btn-danger" data-action-type='eliminar' rel="${species.idespecie}"><i class="bi bi-trash"></i></button></td>
+          <td><button class="btnEditar btn btn-primary" data-action-type='editar' rel="${species.idespecie}"><i class="bi bi-pencil-square"></i></button></td>
           </tr><br>`;
         contenido.innerHTML += fila;
       });
@@ -63,6 +65,7 @@ frmSpecies.addEventListener("submit", (e) => {
     })
       .then((res) => res.json())
       .then((res) => {
+        console.log(res.status, res.respuesta);
         alert("exito");
         frmCrearEspecie.hide();
         location.reload();
@@ -71,7 +74,7 @@ frmSpecies.addEventListener("submit", (e) => {
 
   // editar ciudadano
   if (frmAction === "editar") {
-    fetch(api + "editar/" + idform, {
+    fetch(api + "editar/" + idactual, {
       method: "PUT",
       headers: {
         "content-type": "application/json",
@@ -93,15 +96,13 @@ frmSpecies.addEventListener("submit", (e) => {
 });
 
 on(document, "click", ".btnBorrar", (e) => {
-  let fila = e.target.parentNode.parentNode.parentNode;
-  let idform = fila.firstElementChild.innerText;
+  let idSpecie = e.target.closest("button").getAttribute("rel");
   let respuesta = window.confirm(
-    `seguro que desea eliminar el registro con id: ${idform}`
+    `seguro que desea eliminar el registro con id: ${idSpecie}`
   );
-  console.log(idform);
 
   if (respuesta) {
-    fetch(api + "borrar/" + idform, {
+    fetch(api + "borrar/" + idSpecie, {
       method: "DELETE",
     })
       .then((res) => res.json())
@@ -111,13 +112,11 @@ on(document, "click", ".btnBorrar", (e) => {
   }
 });
 
-// llamar formulario de edición
-let idform = "";
+
 on(document, "click", ".btnEditar", (e) => {
-  let fila = e.target.parentNode.parentNode.parentNode;
-  let idciudadano = fila.children[0].innerText;
-  idform = idciudadano;
-  fetch(api + "listarid/" + idform) 
+  let idSpecie = e.target.closest("button").getAttribute("rel");
+  idactual = idSpecie
+  fetch(api + "listarid/" + idSpecie) 
   .then((res) => res.json())
   .then((res) => {
     species = res.species[0]
